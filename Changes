@@ -1,9 +1,11 @@
 Revision history for Perl extension Tie::Scalar::Sticky.
 
-1.02  Thu Aug 14 2003 - applied broquaint's patch
+1.06  Jan 01 2004 - doc updates
+
+1.04  Aug 14 2003 - applied broquaint's patch
                       - rejects user supplied strings
 
-1.02  Wed Aug 13 2003 - can't be set empty string now
+1.02  Aug 13 2003 - can't be set empty string now
 
-1.00  Tue Aug 12 2003 - first version
+1.00  Aug 12 2003 - first version
 

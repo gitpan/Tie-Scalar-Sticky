@@ -13,9 +13,8 @@ DESCRIPTION
     See perldoc Tie::Scalar::Sticky
 
 AUTHOR
-    Jeffrey Hayes Anderson <captvanhalen@yahoo.com>
+    Jeffrey Hayes Anderson
 
 COPYRIGHT
-    Copyright (c) 2002 Jeffrey Hayes Anderson.
+    Copyright (c) 2004 Jeffrey Hayes Anderson.
 	See source POD for additional copyright information.
-

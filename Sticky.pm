@@ -3,7 +3,7 @@ package Tie::Scalar::Sticky;
 use strict;
 use warnings;
 use vars qw($VERSION);
-$VERSION = '1.04';
+$VERSION = '1.06';
 
 use Symbol;
 use Tie::Scalar;
@@ -77,9 +77,22 @@ defined value should be used instead. In a nutshell:
 
 Should print: 3 3 2 2 1 0
 
+=head1 BUGS
+
+If you have found a bug, typo, etc. please visit Best Practical Solution's
+CPAN bug tracker at http://rt.cpan.org:
+
+E<lt>http://rt.cpan.org/NoAuth/Bugs.html?Dist=Tie-Scalar-StickyE<gt>
+
+or send mail to E<lt>bug-Tie-Scalar-Sticky#rt.cpan.orgE<gt>
+
+(you got this far ... you can figure out how to make that
+a valid address ... and note that i won't respond to bugs
+sent to my personal address any longer)
+
 =head1 AUTHOR 
 
-Jeffrey Hayes Anderson C<E<lt>captvanhalen@yahoo.comE<gt>>
+Jeffrey Hayes Anderson
 
 =head1 CREDITS 
 
@@ -96,7 +109,7 @@ PerlMonks for the education.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003 Jeffrey Hayes Anderson.
+Copyright (c) 2004 Jeffrey Hayes Anderson.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
