@@ -1,25 +1,25 @@
 package Tie::Scalar::Sticky;
 
 use strict;
+use warnings;
 use vars qw($VERSION);
+$VERSION = '1.04';
 
 use Symbol;
 use Tie::Scalar;
 use base 'Tie::StdScalar';
 
-$VERSION = '1.02';
-
 sub TIESCALAR {
 	my $class = shift;
 	my $self = *{gensym()};
-	@$self = @_;
+	@$self = ('',@_);
 	return bless \$self, $class;
 }
 
 sub STORE {
 	my($self,$val) = @_;
-	$$$self = $val
-	if defined $val and $val ne '' and 0 == grep { $val eq $_ } @$$self;
+	return unless defined $val;
+	$$$self = $val unless grep $val eq $_, @$$self;
 }
 
 sub FETCH {
@@ -27,7 +27,7 @@ sub FETCH {
 	return $$$self;
 }
 
-1;
+qw(jeffa);
 
 =pod
 
@@ -61,12 +61,13 @@ of undef or the empty string or any of the extra arugments
 provided to C<tie()>. It simply removes the need for
 you to validate assignments, such as:
 
-   $var = $val if defined $val && $val ne '';
+   $var = $val unless grep $val eq $_, qw(not one of these);
 
-Actually, that is the exact code used in this module. So, why
-do this? Because i recently had to loop through a list where
-some items were undefined and the previously defined value
-should be used instead. In a nutshell:
+Actually, that is the exact idea used in this module ...
+
+So, why do this? Because i recently had to loop through a
+list where some items were undefined and the previously
+defined value should be used instead. In a nutshell:
 
    tie my $sticky, 'Tie::Scalar::Sticky' => 9, 'string';
    for (3,undef,'string',2,'',1,9,0) {
@@ -82,13 +83,16 @@ Jeffrey Hayes Anderson C<E<lt>captvanhalen@yahoo.comE<gt>>
 
 =head1 CREDITS 
 
-Dan [broquaint] Brook for allowing T::S::S to ignore more
-than undef and the empty string. (Half of this code has
-been provided by him. ;))
+Dan [broquaint] Brook
+ Dan added support for user-defined strings by changing
+ $self to a glob. His patch was applied to Version 1.02
+ verbatim, i later 'simplified' the code by assuming that
+ undef and the empty strings (the only two items Version
+ 1.00 will block) are already waiting inside @$$self.
+ Dan then removed undef from @$$self, and i added a simple
+ check that returns from STORE unless $val is defined.
 
-Perl Monks for the education.
-
-Jeffrey Hayes Anderson C<E<lt>captvanhalen@yahoo.comE<gt>>
+PerlMonks for the education.
 
 =head1 COPYRIGHT
 
