@@ -1,25 +1,30 @@
 package Tie::Scalar::Sticky;
 
 use strict;
-use base qw(Tie::Scalar);
 use vars qw($VERSION);
 
-$VERSION = '1.00';
+use Symbol;
+use Tie::Scalar;
+use base 'Tie::StdScalar';
+
+$VERSION = '1.02';
 
 sub TIESCALAR {
 	my $class = shift;
-	my $self;
+	my $self = *{gensym()};
+	@$self = @_;
 	return bless \$self, $class;
 }
 
 sub STORE {
-	my ($self,$val) = @_;
-	$$self = $val if defined $val && $val ne '';
+	my($self,$val) = @_;
+	$$$self = $val
+	if defined $val and $val ne '' and 0 == grep { $val eq $_ } @$$self;
 }
 
 sub FETCH {
 	my $self = shift;
-	return $$self;
+	return $$$self;
 }
 
 1;
@@ -28,8 +33,7 @@ sub FETCH {
 
 =head1 NAME
 
-Tie::Scalar::Sticky 
-   - Block undef and empty string assignments
+Tie::Scalar::Sticky - Block assignments to scalars
 
 =head1 SYNOPSIS
 
@@ -43,10 +47,18 @@ Tie::Scalar::Sticky
    $sticky = undef;    # still 42
    $sticky = 0;        # now it's zero
 
+   tie my $sticky, 'Tie::Scalar::Sticky' => qw/ foo bar /;
+
+   $sticky = 42;
+   $sticky = 'foo';    # still 42
+   $sticky = 'bar';    # still 42
+   $sticky = 0;        # now it's zero
+
 =head1 DESCRIPTION
 
 Scalars tie'ed to this module will 'reject' any assignments
-of undef or the empty string. It simply removes the need for
+of undef or the empty string or any of the extra arugments
+provided to C<tie()>. It simply removes the need for
 you to validate assignments, such as:
 
    $var = $val if defined $val && $val ne '';
@@ -56,8 +68,8 @@ do this? Because i recently had to loop through a list where
 some items were undefined and the previously defined value
 should be used instead. In a nutshell:
 
-   tie my $sticky, 'Tie::Scalar::Sticky';
-   for (3,undef,2,'',1,0) {
+   tie my $sticky, 'Tie::Scalar::Sticky' => 9, 'string';
+   for (3,undef,'string',2,'',1,9,0) {
       $sticky = $_;
       print $sticky, ' ';
    }
@@ -66,7 +78,17 @@ Should print: 3 3 2 2 1 0
 
 =head1 AUTHOR 
 
-Jeffrey Hayes Anderson <captvanhalen@yahoo.com>
+Jeffrey Hayes Anderson C<E<lt>captvanhalen@yahoo.comE<gt>>
+
+=head1 CREDITS 
+
+Dan [broquaint] Brook for allowing T::S::S to ignore more
+than undef and the empty string. (Half of this code has
+been provided by him. ;))
+
+Perl Monks for the education.
+
+Jeffrey Hayes Anderson C<E<lt>captvanhalen@yahoo.comE<gt>>
 
 =head1 COPYRIGHT
 
